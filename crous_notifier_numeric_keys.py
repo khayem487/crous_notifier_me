@@ -84,7 +84,7 @@ def send_telegram_message(url, label):
         )
 
 def aucun_logement(html):
-    return "Aucun logement trouvé" in html or "Aucune résidence disponible" in html or "Erreur de connexion"
+    return "Aucun logement trouvé" in html or "Aucune résidence disponible" in html
 
 def main_loop():
     subprocess.run(["playwright", "install", "chromium"], check=True)
