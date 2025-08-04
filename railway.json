@@ -5,6 +5,7 @@
     "buildCommand": "pip install -r requirements.txt && playwright install && playwright install-deps"
   },
   "deploy": {
-    "startCommand": "python crous_notifier_render_linux.py"
+    "startCommand": "python crous_notifier_numeric_keys.py"
   }
 }
+
