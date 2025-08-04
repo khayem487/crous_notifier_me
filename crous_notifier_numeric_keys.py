@@ -2,6 +2,13 @@ import time
 import requests
 import threading
 from playwright.sync_api import sync_playwright
+import subprocess
+
+# Force install of Playwright browsers at runtime if not already done
+try:
+    subprocess.run(["playwright", "install", "chromium"], check=True)
+except Exception as e:
+    print("[!] Playwright install failed or already installed:", e)
 
 # === CONFIGURATION ===
 CROUS_ZONES = [
