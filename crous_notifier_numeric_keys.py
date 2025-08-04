@@ -10,7 +10,8 @@ CROUS_ZONES = [
     ("https://trouverunlogement.lescrous.fr/tools/41/search?bounds=2.0362453_49.0338281_2.0845719_49.00172", "95000"),
     ("https://trouverunlogement.lescrous.fr/tools/41/search?bounds=1.9999694_49.0564525_2.0911198_49.017998", "cergy"),
     ("https://trouverunlogement.lescrous.fr/tools/41/search?bounds=2.224122_48.902156_2.4697602_48.8155755", "paris"),
-    ("https://trouverunlogement.lescrous.fr/tools/41/search?bounds=2.0721836_49.0731128_2.1270334_49.024178", "pontoise")
+    ("https://trouverunlogement.lescrous.fr/tools/41/search?bounds=2.0721836_49.0731128_2.1270334_49.024178", "pontoise"),
+    ("https://trouverunlogement.lescrous.fr/tools/41/search?bounds=1.4462445_49.241431_3.5592208_48.1201456", "ile de france")
 ]
 CHECK_INTERVAL = 150
 TELEGRAM_BOT_TOKEN = "7419377967:AAF3v-oUKBhjIaGbmGk7eAi6YErzGkyoLvc"
