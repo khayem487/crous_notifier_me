@@ -1,16 +1,11 @@
 import time
-import requests
 import threading
+import requests
 from playwright.sync_api import sync_playwright
 import subprocess
+from flask import Flask, request
 
-# Force install of Playwright browsers at runtime if not already done
-try:
-    subprocess.run(["playwright", "install", "chromium"], check=True)
-except Exception as e:
-    print("[!] Playwright install failed or already installed:", e)
-
-# === CONFIGURATION ===
+# === CONFIG ===
 CROUS_ZONES = [
     ("https://trouverunlogement.lescrous.fr/tools/41/search?bounds=2.0362453_49.0338281_2.0845719_49.00172", "95000"),
     ("https://trouverunlogement.lescrous.fr/tools/41/search?bounds=1.9999694_49.0564525_2.0911198_49.017998", "cergy"),
@@ -21,9 +16,53 @@ CHECK_INTERVAL = 150
 TELEGRAM_BOT_TOKEN = "7419377967:AAF3v-oUKBhjIaGbmGk7eAi6YErzGkyoLvc"
 TELEGRAM_CHAT_ID = "6053608629"
 
+# State variables
 pause = False
 mute = False
 active_zones = [True] * len(CROUS_ZONES)
+
+# Flask app for receiving Telegram webhook commands
+app = Flask(__name__)
+
+@app.route(f"/bot{TELEGRAM_BOT_TOKEN}", methods=["POST"])
+def telegram_webhook():
+    global pause, mute, active_zones
+    data = request.json
+    message = data.get("message", {}).get("text", "").strip().lower()
+    chat_id = data.get("message", {}).get("chat", {}).get("id")
+    if str(chat_id) != TELEGRAM_CHAT_ID:
+        return "ignored", 200
+
+    response = "Commande non reconnue."
+    if message == "/pause":
+        pause = not pause
+        response = "⏸️ Pause activée" if pause else "▶️ Reprise"
+    elif message == "/mute":
+        mute = not mute
+        response = "🔕 Muet activé" if mute else "🔔 Notifications activées"
+    elif message == "/status":
+        response = "📊 État des zones :\n"
+        for i, (_, label) in enumerate(CROUS_ZONES):
+            response += f"{i+1}. {label}: {'✅' if active_zones[i] else '❌'}\n"
+        response += f"Pause: {'⏸️' if pause else '▶️'}, Mute: {'🔕' if mute else '🔔'}"
+    elif message.startswith("/disable "):
+        try:
+            idx = int(message.split()[1]) - 1
+            active_zones[idx] = False
+            response = f"❌ Zone {CROUS_ZONES[idx][1]} désactivée"
+        except:
+            response = "Erreur lors de la désactivation."
+    elif message.startswith("/enable "):
+        try:
+            idx = int(message.split()[1]) - 1
+            active_zones[idx] = True
+            response = f"✅ Zone {CROUS_ZONES[idx][1]} activée"
+        except:
+            response = "Erreur lors de l'activation."
+
+    requests.post(f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage",
+                  data={"chat_id": TELEGRAM_CHAT_ID, "text": response})
+    return "ok", 200
 
 def send_telegram_message(url, label):
     if not mute:
@@ -36,31 +75,10 @@ def send_telegram_message(url, label):
 def aucun_logement(html):
     return "Aucun logement trouvé" in html or "Aucune résidence disponible" in html or "Erreur de connexion"
 
-def input_listener():
-    global pause, mute
-    while True:
-        cmd = input("Commande (1-4=toggle zone, p=pause, m=mute, z=état, q=quitter) : ").strip().lower()
-        if cmd == "p":
-            pause = not pause
-            print("⏸️ Pause activée" if pause else "▶️ Reprise")
-        elif cmd == "m":
-            mute = not mute
-            print("🔕 Muet activé" if mute else "🔔 Notifications sonores activées")
-        elif cmd == "z":
-            print("📊 État des zones :")
-            for i, (_, label) in enumerate(CROUS_ZONES):
-                status = "✅" if active_zones[i] else "❌"
-                print(f"{i+1}. {label} : {status}")
-        elif cmd in {"1", "2", "3", "4"}:
-            i = int(cmd) - 1
-            active_zones[i] = not active_zones[i]
-            print(f"🔄 Zone {CROUS_ZONES[i][1]} → {'active' if active_zones[i] else 'suspendue'}")
-        elif cmd == "q":
-            print("🛑 Arrêt demandé. Fin du script.")
-            exit()
-
 def main_loop():
-    threading.Thread(target=input_listener, daemon=True).start()
+    subprocess.run(["playwright", "install", "chromium"], check=True)
+    subprocess.run(["playwright", "install-deps"], check=True)
+    threading.Thread(target=lambda: app.run(host="0.0.0.0", port=8000), daemon=True).start()
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
         page = browser.new_page()
