@@ -3,5 +3,5 @@ services:
     name: crous-notifier
     env: python
     buildCommand: pip install -r requirements.txt && playwright install
-    startCommand: python crous_notifier_numeric_keys.py
+    startCommand: python crous_notifier_render_linux.py
     plan: free
