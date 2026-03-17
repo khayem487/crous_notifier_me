@@ -1,3 +1,3 @@
-flask
-pandas
-numpy
+requests
+beautifulsoup4
+python-dotenv

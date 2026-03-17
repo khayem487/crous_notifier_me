@@ -1,57 +1,58 @@
-# Dashboard Data Achats
+# Crous Notifier (Friend)
 
-## Description
+Petit projet Python pour surveiller une page Crous et envoyer une alerte dès qu'une disponibilité potentielle est détectée.
 
-Ce projet est un **tableau de bord analytique** simulant le suivi des achats industriels pour une entreprise.
-Il permet de visualiser rapidement les indicateurs clés (KPIs), les tendances mensuelles, la répartition des dépenses et une cascade budgétaire.
+## Fonctionnalités
 
-## Stack technique
+- Vérification périodique d'une page web Crous
+- Analyse simple du texte de la page
+- Détection d'état:
+  - `AVAILABLE` (signaux de disponibilité)
+  - `UNAVAILABLE` (aucune offre / complet)
+  - `UNKNOWN` (ambigu)
+- Notification Telegram optionnelle
+- Mode `--once` pour un test unique
+- Mémoire d'état locale (`state.json`) pour éviter le spam
 
-- Python
-- Flask
-- Pandas
-- NumPy
-- Chart.js
-- JavaScript (vanilla)
-
-## Lancer le projet
-
-1. Installer les dépendances :
+## Installation
 
 ```bash
 pip install -r requirements.txt
 ```
 
-2. Générer les données :
+## Configuration
+
+Copie le fichier `.env.example` vers `.env` puis ajuste les variables:
 
 ```bash
-python generate_data.py
+cp .env.example .env
 ```
 
-3. Démarrer l'application Flask :
+Variables principales:
+
+- `CROUS_URL` : URL à surveiller
+- `CHECK_INTERVAL_SEC` : fréquence de check (par défaut 300)
+- `TELEGRAM_BOT_TOKEN` : token bot Telegram (optionnel)
+- `TELEGRAM_CHAT_ID` : chat id Telegram (optionnel)
+
+## Utilisation
+
+### Test unique
 
 ```bash
-python app.py
+python crous_notifier.py --once
 ```
 
-4. Ouvrir dans le navigateur :
+### Mode continu
 
-```text
-http://localhost:5000
+```bash
+python crous_notifier.py
 ```
 
-## API disponibles
+## Remarques
 
-- `GET /api/kpis`
-- `GET /api/par_mois`
-- `GET /api/par_categorie`
-- `GET /api/par_fournisseur`
-- `GET /api/cascade_budget`
+- Le parsing est volontairement simple et dépend du contenu texte rendu par la page.
+- Si le site change fortement, adapter les listes de mots-clés dans `crous_notifier.py`.
 
-## Screenshots
-
-*(à venir)*
-
-## Auteur
-
-Khayem Ben Ghorbel — github.com/khayem487
+---
+Auteur: Khayem Ben Ghorbel
