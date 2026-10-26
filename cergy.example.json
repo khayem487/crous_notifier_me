@@ -1,0 +1,9 @@
+{
+  "zone": "Cergy",
+  "housing_type": "chambre",
+  "max_rent_eur": null,
+  "source_url": "https://trouverunlogement.lescrous.fr/tools/47/search?bounds=1.9999694_49.0564525_2.0911198_49.017998&locationName=Cergy",
+  "database": "data/crous-personal.sqlite3",
+  "interval_seconds": 300,
+  "request_timeout_seconds": 15
+}

@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Une vérification ponctuelle du portail public Crous, avec des signaux explicites et un résultat horodaté.">
+  <title>Crous Notifier — Vérification ponctuelle</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='app.css') }}">
+  <script src="{{ url_for('static', filename='app.js') }}" defer></script>
+</head>
+<body>
+  <header class="topbar wrap">
+    <a class="brand" href="/" aria-label="Crous Notifier, accueil"><span class="brand-mark" aria-hidden="true">⌁</span><span>Crous <strong>Notifier</strong></span></a>
+    <span class="mode"><span aria-hidden="true"></span>Vérification ponctuelle</span>
+    <a class="quiet-link" href="https://github.com/khayem487/crous_notifier_me" target="_blank" rel="noopener noreferrer">Code source ↗</a>
+  </header>
+  <main class="wrap">
+    <section class="hero" aria-labelledby="title">
+      <div class="hero-copy">
+        <p class="eyebrow">AUTOMATISATION · LOGEMENT ÉTUDIANT</p>
+        <h1 id="title">Un contrôle simple.<br><span>Un résultat explicite.</span></h1>
+        <p class="lead">Vérifie le texte d'une recherche sur le portail public Crous, avec sa zone et ses critères. Un contenu incomplet reste indéterminé.</p>
+        <div class="traits"><span>Sans compte</span><span>Aucune notification envoyée</span><span>Domaine officiel uniquement</span></div>
+      </div>
+      <div class="hero-note"><span class="note-index">01 / LE PRINCIPE</span><p>Le mot « disponible » ne suffit pas.</p><span>La vérification cherche une indication explicite. Si la page ne permet pas de conclure, le résultat reste indéterminé.</span></div>
+    </section>
+
+    <section class="workspace" aria-label="Vérifier le portail">
+      <article class="source-card">
+        <p class="eyebrow">SOURCE À CONSULTER</p>
+        <div class="source-icon" aria-hidden="true">↗</div>
+        <h2>Ta recherche Crous</h2>
+        <p>Ouvre le portail, choisis une zone et copie le lien de ta recherche publique. Sans lien configuré, le contrôle porte uniquement sur l'accueil.</p>
+        <a class="domain" href="{{ official_url }}" target="_blank" rel="noopener noreferrer">trouverunlogement.lescrous.fr ↗</a>
+        <form id="search-form">
+          <label for="source-url">Lien de recherche officiel</label>
+          <input id="source-url" name="source_url" type="url" value="{{ official_url }}" maxlength="2048" required aria-describedby="search-help" autocomplete="off">
+          <label for="search-zone">Zone de la recherche</label>
+          <input id="search-zone" name="zone" type="text" maxlength="100" placeholder="Ville ou secteur indiqué sur la page" autocomplete="off">
+          <label for="search-criteria">Critères à retrouver <span>(facultatif)</span></label>
+          <input id="search-criteria" name="criteria" type="text" maxlength="300" placeholder="Texte exact des critères affichés" autocomplete="off">
+          <p id="search-help" class="small">Les filtres sont ceux du lien Crous. Les champs zone et critères servent à confirmer le texte reçu ; ils ne modifient pas la recherche officielle.</p>
+          <button id="check-button" type="submit"><span id="button-label">Lancer une vérification</span><span aria-hidden="true">→</span></button>
+        </form>
+        <p class="small">Une page déjà contrôlée est réutilisée pendant deux minutes. Un nouveau lien demande d'attendre entre deux contrôles.</p>
+      </article>
+
+      <article class="result-card" id="result-card" aria-busy="false">
+        <div class="result-top"><p class="eyebrow">RÉSULTAT DU CONTRÔLE</p><span id="state-badge" class="state-badge">À vérifier</span></div>
+        <div class="result-body" aria-live="polite" aria-atomic="true">
+          <div id="result-icon" class="result-icon" aria-hidden="true">◎</div>
+          <h2 id="result-title">Aucune vérification lancée</h2>
+          <p id="result-evidence">Lance un contrôle pour consulter l'état de la source. Aucun résultat n'est prérempli.</p>
+          <p id="result-scope" class="result-scope">Aucune zone configurée.</p>
+        </div>
+        <dl class="metrics">
+          <div><dt>Signal chiffré</dt><dd id="result-count">—</dd></div>
+          <div><dt>Dernier contrôle</dt><dd id="result-time">—</dd></div>
+          <div><dt>Page reçue</dt><dd id="result-fetch">—</dd></div>
+        </dl>
+      </article>
+    </section>
+
+    <section class="reading" aria-labelledby="reading-title">
+      <div><p class="eyebrow">BIEN LIRE LE RÉSULTAT</p><h2 id="reading-title">Une observation,<br>pas une réservation.</h2></div>
+      <div class="reading-grid">
+        <article><span class="step">01</span><h3>Ce qui est vérifié</h3><p>Le texte du lien officiel reçu au moment indiqué. La zone et les critères saisis doivent y apparaître avant qu'un nombre soit attribué à ta recherche.</p></article>
+        <article><span class="step">02</span><h3>Quand c'est indéterminé</h3><p>Une page inaccessible, un contenu incomplet ou des indications contradictoires ne permettent pas d'annoncer des offres disponibles.</p></article>
+        <article><span class="step">03</span><h3>La suite se passe à la source</h3><p>Pour rechercher une ville, voir les conditions et candidater, consulte directement le portail officiel.</p><a href="{{ official_url }}" target="_blank" rel="noopener noreferrer">Ouvrir le portail Crous ↗</a></article>
+      </div>
+    </section>
+  </main>
+  <footer class="wrap"><p>Prototype indépendant · Python / Flask</p><p>Aucune surveillance continue ni alerte email ou Telegram n'est activée sur ce site.</p></footer>
+</body>
+</html>
