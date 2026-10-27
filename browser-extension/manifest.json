@@ -1,0 +1,22 @@
+{
+  "manifest_version": 3,
+  "name": "Mon suivi CROUS · Cergy",
+  "version": "1.0.0",
+  "description": "Surveillance locale des résultats Cergy dans votre session normale. Aucune candidature automatique.",
+  "permissions": ["storage", "alarms", "notifications"],
+  "host_permissions": ["https://trouverunlogement.lescrous.fr/*"],
+  "background": {"service_worker": "src/worker.js", "type": "module"},
+  "action": {"default_popup": "popup/index.html", "default_title": "Mon suivi CROUS · Cergy"},
+  "icons": {"48": "icons/icon48.png", "128": "icons/icon128.png"},
+  "content_scripts": [{
+    "matches": ["https://trouverunlogement.lescrous.fr/*"],
+    "js": ["src/content.js"],
+    "run_at": "document_idle",
+    "all_frames": false
+  }],
+  "web_accessible_resources": [{
+    "resources": ["src/model.js", "src/parser.js", "src/controls.js"],
+    "matches": ["https://trouverunlogement.lescrous.fr/*"]
+  }],
+  "content_security_policy": {"extension_pages": "script-src 'self'; object-src 'none'; connect-src 'none'"}
+}

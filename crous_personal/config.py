@@ -18,12 +18,15 @@ class PersonalConfig:
     zone: str = "Cergy"
     housing_type: str = "chambre"
     max_rent_eur: str | None = None
+    move_in_preference: str = "asap"
     source_url: str = CERGY_PUBLIC_URL
     database: str = "data/crous-personal.sqlite3"
     interval_seconds: int = 300
     request_timeout_seconds: int = 15
 
     def __post_init__(self):
+        if self.move_in_preference != "asap":
+            raise ValueError("L'entrée est configurée dès disponibilité : move_in_preference=asap.")
         for name in ("zone", "housing_type"):
             value = getattr(self, name)
             if not isinstance(value, str) or not value.strip() or len(value) > 100 or any(ord(c) < 32 for c in value):

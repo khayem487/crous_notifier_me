@@ -10,6 +10,19 @@ from crous_personal.config import PersonalConfig, load_personal_config
 from crous_personal.source import PUBLIC_LIMIT, check_public_source
 from crous_personal.store import PersonalStore
 
+MAX_SNAPSHOT_BYTES = 2_000_000
+AUDIENCES = ("AUTHENTICATED", "PUBLIC_ONLY")
+
+
+def read_offer_snapshot(path):
+    from crous_personal.importers import parse_snapshot
+
+    with Path(path).open("rb") as incoming:
+        content = incoming.read(MAX_SNAPSHOT_BYTES + 1)
+    if len(content) > MAX_SNAPSHOT_BYTES:
+        raise ValueError("Le fichier d'annonces dépasse la limite de 2 Mo.")
+    return parse_snapshot(content)
+
 
 def perform_check(config, store, checker=None):
     retry = store.claim_check()
@@ -72,6 +85,18 @@ def build_parser():
     commands.add_parser("export", help="Exporter l'historique et les suivis locaux en JSON sur stdout")
     backup = commands.add_parser("backup", help="Sauvegarde SQLite cohérente, y compris en mode WAL")
     backup.add_argument("--output", type=Path, help="Nouveau fichier .sqlite3 ; défaut dans exports/")
+    imported = commands.add_parser("import-offers", help="Importer un relevé JSON du compagnon Edge, sans requête réseau")
+    imported.add_argument("file", type=Path)
+    offers = commands.add_parser("offers", help="Annonces conservées, séparées entre profil connecté et recherche publique")
+    offers.add_argument("--audience", choices=AUDIENCES, default="AUTHENTICATED")
+    offers.add_argument("--all", action="store_true", help="Inclure les annonces inactives")
+    events = commands.add_parser("offer-events", help="Nouvelles annonces et changements conservés localement")
+    events.add_argument("--audience", choices=AUDIENCES, default="AUTHENTICATED")
+    events.add_argument("--limit", type=int, default=100)
+    offer_history = commands.add_parser("offer-history", help="Historique d'une annonce, sans requête réseau")
+    offer_history.add_argument("offer_key")
+    offer_history.add_argument("--audience", choices=AUDIENCES, default="AUTHENTICATED")
+    offer_history.add_argument("--limit", type=int, default=100)
     commands.add_parser("monitor", help="Boucle locale au premier plan, seulement si lancée explicitement ; Ctrl+C arrête")
     return parser
 
@@ -104,7 +129,9 @@ def main(argv=None):
             if args.command == "status":
                 print_result({"preferences": config.as_dict(), **store.status(config.profile_key),
                               "limitation": PUBLIC_LIMIT, "notifications_enabled": False,
-                              "automatic_room_detection_verified": False}, args.json)
+                              "source_mode": "PUBLIC_HTTP",
+                              "browser_companion_required_for_profile": True,
+                              "offer_import_supported": True}, args.json)
             elif args.command == "history":
                 print_result(store.history(config.profile_key, args.limit), args.json)
             elif args.command == "changes":
@@ -125,12 +152,26 @@ def main(argv=None):
                 print_result({"preferences": config.as_dict(), "status": store.status(config.profile_key),
                               "history": store.history(config.profile_key, None),
                               "notices": store.notices(config.profile_key, True),
-                              "watchlist": store.watches(True), "limitation": PUBLIC_LIMIT}, True)
+                              "watchlist": store.watches(True),
+                              "offers_by_audience": {audience: store.offers(config.profile_key, audience, include_inactive=True)
+                                                     for audience in AUDIENCES},
+                              "offer_events_by_audience": {audience: store.offer_events(config.profile_key, audience, limit=None)
+                                                           for audience in AUDIENCES},
+                              "limitation": PUBLIC_LIMIT}, True)
             elif args.command == "backup":
                 destination = args.output or args.config.resolve().parent / "exports" / ("crous-personal-" + datetime.now(timezone.utc).strftime("%Y%m%d-%H%M%S-%f") + ".sqlite3")
                 if destination.suffix != ".sqlite3":
                     raise ValueError("Le fichier de sauvegarde doit porter l'extension .sqlite3.")
                 print_result({"backup": store.backup(destination), "monitoring_started": False}, args.json)
+            elif args.command == "import-offers":
+                snapshot = read_offer_snapshot(args.file)
+                print_result(store.import_offers(config, snapshot), args.json)
+            elif args.command == "offers":
+                print_result(store.offers(config.profile_key, args.audience, include_inactive=args.all), args.json)
+            elif args.command == "offer-events":
+                print_result(store.offer_events(config.profile_key, args.audience, limit=args.limit), args.json)
+            elif args.command == "offer-history":
+                print_result(store.offer_history(config.profile_key, args.audience, args.offer_key, limit=args.limit), args.json)
             elif args.command == "monitor":
                 print("Surveillance locale au premier plan. Ctrl+C pour arrêter. Aucune notification externe.")
                 print(PUBLIC_LIMIT)

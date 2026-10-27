@@ -10,6 +10,7 @@ __pycache__/
 data/
 exports/
 cergy.json
+crous-cergy-*.json
 *.personal.json
 *.sqlite*
 *.db*
@@ -18,3 +19,5 @@ browser-data/
 cookies*.json
 *storage-state*.json
 *.har
+browser-extension/node_modules/
+browser-extension/dist/

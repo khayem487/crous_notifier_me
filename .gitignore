@@ -13,6 +13,7 @@ cergy.json
 exports/
 crous-personal-export*.json
 crous-personal-export*.csv
+crous-cergy-*.json
 *.sqlite3
 *.sqlite3-wal
 *.sqlite3-shm
