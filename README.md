@@ -1,4 +1,10 @@
-# Crous Notifier (Friend)
+# Crous Notifier
+
+**Usage actuel : suivi personnel local pour Cergy, avec préférence chambre et aucun budget imposé.** Historique SQLite, notifications locales dédupliquées, suivi manuel des démarches et sauvegardes : [guide personnel Windows](README-PERSONAL.md).
+
+Le module `python -m crous_personal` n'envoie aucun message externe. La source publique et les offres accessibles après connexion DSE restent distinguées. Aucun site de démonstration ni déploiement cloud n'est nécessaire.
+
+## Script historique
 
 Petit projet Python pour surveiller une page Crous et envoyer une alerte dès qu'une disponibilité potentielle est détectée.
 
@@ -13,6 +19,8 @@ Petit projet Python pour surveiller une page Crous et envoyer une alerte dès qu
 - Notification Telegram optionnelle
 - Mode `--once` pour un test unique
 - Mémoire d'état locale (`state.json`) pour éviter le spam
+
+Une page inaccessible ou un résultat `UNKNOWN` conserve le dernier état fiable et n'envoie aucune alerte. Si Telegram est configuré mais que l'envoi échoue, la transition n'est pas acquittée : le contrôle fiable suivant peut réessayer. Les journaux d'erreur ne recopient pas les URL pouvant contenir le token du bot.
 
 ## Installation
 
@@ -51,8 +59,9 @@ python crous_notifier.py
 
 ## Remarques
 
-- Le parsing est volontairement simple et dépend du contenu texte rendu par la page.
-- Si le site change fortement, adapter les listes de mots-clés dans `crous_notifier.py`.
+- Le parsing dépend du texte réellement reçu. Les mots de navigation seuls ne prouvent pas une disponibilité ; un nombre explicite est nécessaire.
+- Une page d'accueil, une application JavaScript ou une page inaccessible peut donc rester `UNKNOWN`. Le script ne prétend pas avoir lancé une recherche par ville.
+- L'interface web préparée permet de renseigner un lien de recherche officiel, sa zone et ses critères : voir [README-WEB.md](README-WEB.md). Elle ne démarre ni surveillance continue ni notification et n'est pas publiée à ce stade.
 
 ---
 Auteur: Khayem Ben Ghorbel

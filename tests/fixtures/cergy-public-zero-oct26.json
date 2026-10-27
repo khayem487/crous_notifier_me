@@ -1,0 +1,15 @@
+{
+  "checked_at": "2026-10-26T17:25:54.700405+00:00",
+  "source_url": "https://trouverunlogement.lescrous.fr/tools/47/search?bounds=1.9999694_49.0564525_2.0911198_49.017998&locationName=Cergy",
+  "method": "One bounded unauthenticated HTTP GET to exact URL produced by official search form; no redirect, login, scheduler or notification.",
+  "http_status": 200,
+  "text": "Mon logement pour cette année 2026‑2027 Aucun logement trouvé pour Cergy Filtrer Ville, résidence ou lieu d'étude Prix maximum Surface minimum en m² Type de cohabitation Individuel Couple Colocation Accessibilité Logement adapté PMR Voir plus de filtres Aucun logement trouvé pour Cergy Afficher sur une carte",
+  "analysis": {
+    "state": "UNAVAILABLE",
+    "count": 0,
+    "reason": "EXPLICIT_NO_RESULTS",
+    "evidence": "Le texte reçu indique explicitement une absence d'offres ou de logements.",
+    "zone_confirmed_in_text": true,
+    "criteria_confirmed_in_text": true
+  }
+}

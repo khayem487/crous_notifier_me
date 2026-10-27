@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="fr">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mon suivi CROUS · Cergy</title><link rel="stylesheet" href="style.css"></head>
+<body>
+<header class="header"><img src="../icons/icon48.png" width="42" height="42" alt="">
+ <div><p class="eyebrow">PERSONNEL · SUR CE NAVIGATEUR</p><h1>Mon suivi CROUS</h1><p class="subtitle">Cergy, une chambre dès que possible.</p></div></header>
+<main>
+ <div id="preview-banner" class="banner" hidden>Aperçu local — données TEST fictives. Aucun contrôle CROUS ni notification réelle.</div>
+ <section class="status-panel" aria-label="État de la surveillance">
+  <div class="status-line"><span id="status" class="status">En pause</span><span id="scope" class="scope">Pas de relevé</span></div>
+  <p id="message" role="status">Chargement du suivi local…</p><p id="checked" class="muted"></p><p id="reliable" class="muted"></p>
+  <p id="alerts-state" class="fine" role="status"></p>
+  <div class="criteria"><span>Cergy</span><span>Préférence chambre</span><span>Entrée dès que possible</span><span id="budget-chip">Sans plafond</span></div>
+  <div class="actions"><button id="start" class="primary">Démarrer</button><button id="check">Vérifier maintenant</button></div>
+  <div class="actions secondary"><button id="stop">Mettre en pause</button><button id="open-search">Ouvrir Cergy ↗</button></div>
+  <p class="fine">Vérifications espacées d’au moins 5 min. Le PC et Edge doivent rester ouverts. Une connexion expirée met la surveillance en pause.</p>
+ </section>
+ <div id="error" class="error" role="alert" hidden></div>
+ <nav class="tabs" aria-label="Pages du suivi"><button id="tab-offers" aria-pressed="true">Fiches</button><button id="tab-history" aria-pressed="false">Historique</button><button id="tab-settings" aria-pressed="false">Réglages</button></nav>
+ <section id="offers-page" aria-label="Fiches observées">
+  <div class="filters"><label>Afficher<select id="kind-filter"><option value="ALL">Toutes les fiches</option><option value="CONFIRMED">Chambres indiquées à Cergy</option><option value="REVIEW">Type ou ville à vérifier</option></select></label>
+   <label>Périmètre<select id="scope-filter"><option value="ALL">Tous</option><option value="PUBLIC_ONLY">Public</option><option value="AUTHENTICATED">Connecté confirmé</option></select></label></div>
+  <p id="offer-count" class="muted"></p><div id="offers"></div>
+  <p class="fine">Une carte peut représenter une résidence et plusieurs loyers. « Individuel » ne prouve pas une chambre. La disponibilité pour ton profil et les démarches se vérifient sur la fiche officielle.</p>
+ </section>
+ <section id="history-page" aria-label="Historique" hidden><h2>Derniers contrôles</h2><div id="history"></div><h2>Changements de fiches</h2><div id="events"></div></section>
+ <section id="settings-page" aria-label="Réglages" hidden>
+  <h2>Alertes Windows</h2><div class="actions"><button id="test-alert">Tester l’alerte locale</button><button id="retry-alerts">Réessayer les alertes</button></div>
+  <p class="fine">Un échec conserve les alertes en attente. Le test annonce clairement qu’aucun logement n’a été détecté.</p>
+  <form id="settings-form"><h2>Mes critères</h2><label>Budget mensuel maximum, facultatif<input id="budget" type="number" min="1" step="0.01" placeholder="Aucun plafond"></label>
+   <p class="fine">Un prix inconnu reste à vérifier ; aucune limite n’est ajoutée par défaut.</p>
+   <label>Espacement des vérifications<select id="interval"><option value="300">5 minutes</option><option value="600">10 minutes</option><option value="900">15 minutes</option><option value="1800">30 minutes</option><option value="3600">1 heure</option></select></label>
+   <label>Couverture attendue<select id="audience-mode"><option value="AUTHENTICATED">Mon profil connecté (recommandé)</option><option value="PUBLIC_ONLY">Recherche publique uniquement — choix explicite</option></select></label>
+   <p class="fine">Par défaut, un résultat seulement public suspend le suivi et demande la connexion. Le mode public ne prétend jamais couvrir ton dossier DSE.</p>
+   <button class="primary" type="submit">Enregistrer les réglages</button>
+  </form>
+  <h2>Relevé portable</h2><p class="fine">JSON v1 compatible avec l’outil local Python. Un import est marqué comme tel, sans requête réseau ni notification. Il ne valide pas une disponibilité actuelle.</p>
+  <div class="actions"><button id="export">Exporter le dernier relevé</button><label class="file-button">Importer un relevé<input id="import-file" type="file" accept=".json,application/json"></label></div>
+  <button id="backup">Sauvegarder l’historique du navigateur</button>
+  <p class="fine">La sauvegarde contient aussi les critères, fiches et événements locaux. Son format est distinct du relevé v1 importable dans Python ; ce bouton ne déclenche aucun envoi externe.</p>
+  <h2>Sur ton PC</h2><p class="fine">L’extension conserve seulement les fiches, critères et contrôles. Elle ne lit ni mot de passe ni cookie. Aucun accès aux autres sites, aucun email, aucune candidature ou réservation automatique.</p>
+ </section>
+</main><footer>Outil personnel indépendant · Les démarches restent sur le portail officiel.</footer>
+<script type="module" src="popup.js"></script>
+</body></html>
