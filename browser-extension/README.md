@@ -30,7 +30,7 @@ Un mode Individuel, une résidence, un prix ou une surface ne prouvent pas un ty
 
 Un relevé COMPLETE exige un périmètre confirmé, un compteur visible unique cohérent avec les fiches dédupliquées et aucune page suivante active. Un relevé PARTIAL conserve les fiches vues mais ne permet jamais de déduire une disparition. Une erreur, un format inconnu ou une connexion manquante conserve les dernières données fiables. Public et connecté ont des historiques et comparaisons séparés. Les alertes de nouvelles fiches, prix et informations modifiés sont dédupliquées ; le passage à un type chambre et une ville Cergy explicitement indiqués est signalé séparément. Une fiche de type ou ville inconnu est toujours annoncée à vérifier.
 
-Le périmètre connecté exige un libellé explicite de déconnexion dans le vrai header, même si le menu est replié, sans libellé Identification/Connexion contradictoire. Le contenu des cartes ou des scripts ne peut pas établir ce périmètre. La présence de ce marqueur dans une vraie session CROUS connectée reste à confirmer lors de la recette sur le poste ; la connexion à MesServices seule n'est pas une preuve.
+Le périmètre connecté exige un lien de déconnexion dans le vrai header, même si le menu est replié, sans libellé Identification/Connexion contradictoire. Le lien officiel `/mse/oidc/local-logout`, observé le 27 octobre dans une vraie session, est reconnu même si le nom du compte précède « Déconnexion ». Ce nom n'est pas exporté. Un lien étranger ou un faux header dans une carte ne peut pas établir ce périmètre. La connexion à MesServices seule n'est pas une preuve de connexion au portail logement.
 
 Cette version ne parcourt pas automatiquement les autres pages. Une pagination active ou un compteur incohérent donne PARTIAL et la fenêtre indique que seule la page courante est couverte. Aucune détection exhaustive de toutes les pages n'est revendiquée.
 
@@ -62,7 +62,7 @@ Sauvegarder l'historique du navigateur produit crous-cergy-backup-DATE.json, for
 
 Node 22 ou plus récent : npm ci --ignore-scripts, puis npm test et npm run validate. Les tests utilisent des documents DOM fictifs et une API Chrome simulée, sans navigateur ni requête CROUS. L'icône originale est reproductible avec node scripts/icons.js. PowerShell : ./scripts/package.ps1 crée l'archive source installable dans dist, sans node_modules ni tests.
 
-Au 27 octobre 2026, les 71 tests Node passent sans test ignoré. Cela couvre les commandes du badge, l'isolation des onglets/documents, les alertes en attente, la persistance, la lecture et les erreurs de source. Ces tests ne remplacent pas l'installation et la notification réelles sur le poste.
+Au 27 octobre 2026, les 75 tests Node passent sans test ignoré. Cela couvre les commandes du badge, l'isolation des onglets/documents, les alertes en attente, la persistance, la lecture, les erreurs de source et le lien de compte réellement observé. Ces tests ne remplacent pas l'installation et la notification réelles sur le poste.
 
 Pour revoir visuellement la popup sans installation, servir ce dossier par un serveur statique local puis ouvrir popup/index.html dans Edge via Cua. Le bandeau TEST reste visible, les logements sont fictifs et les actions sur le portail sont désactivées. Ce mode n'installe rien et ne prouve pas les API d'extension.
 

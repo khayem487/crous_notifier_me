@@ -30,9 +30,24 @@ export function parseDocument(document, {url = CERGY_URL, now = new Date().toISO
   const main = document.querySelector('main');
   // An actual header logout item can be inside a collapsed account menu. A DOM
   // template or a contradictory login marker must never establish authentication.
-  const navText = [...document.querySelectorAll('header a,header button,.fr-header a,.fr-header button,[role="banner"] a,[role="banner"] button')]
-    .filter(el => !el.closest('script,style,template,noscript')).map(el => normal(el.textContent));
-  const logout = navText.some(t => /^(?:se deconnecter|deconnexion)$/.test(t));
+  const navControls = [...document.querySelectorAll('header a,header button,.fr-header a,.fr-header button,[role="banner"] a,[role="banner"] button')]
+    .filter(el => !el.closest('script,style,template,noscript,main,.fr-card'));
+  const navText = navControls.map(el => normal(el.textContent));
+  function localHref(el) {
+    const href = el.getAttribute('href');
+    if (!href) return null;
+    try {
+      const target = new URL(href, ORIGIN);
+      return target.origin === ORIGIN && !target.username && !target.password ? target : null;
+    } catch { return null; }
+  }
+  const logout = navControls.some(el => {
+    const target = localHref(el);
+    // The real account link includes the user's name before "Déconnexion".
+    // Establish its role from the observed official route, without storing that name.
+    if (target?.pathname === '/mse/oidc/local-logout' && !target.search && !target.hash) return true;
+    return (!el.hasAttribute('href') || target !== null) && /^(?:se deconnecter|deconnexion)$/.test(normal(el.textContent));
+  });
   const login = navText.some(t => /^(?:se connecter|connexion|me connecter|identification|s.identifier)$/.test(t));
   const authenticated = logout && !login, publicConfirmed = login && !logout;
   const base = {schema_version: 1, source_url: CERGY_URL, zone: 'Cergy',

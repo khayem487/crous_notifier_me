@@ -141,6 +141,6 @@ La boucle reste attachée au terminal et s'arrête avec **Ctrl+C**. Le PC doit r
 
 Les tests couvrent le résultat public réellement observé, le passage à un résultat à vérifier, l'absence de faux positifs de chambres, la persistance, le dédoublonnage après redémarrage, le délai entre processus, le rollback SQLite, les sauvegardes et les liens avec tokens refusés. Les tests ne réalisent aucun appel Crous ni aucun envoi externe.
 
-La suite Python compte 71 tests réussis au 27 octobre 2026. Le compagnon possède sa suite Node séparée de 71 tests ; aucune détection positive réelle n'est déduite de ces essais hors navigateur.
+La suite Python compte 71 tests réussis au 27 octobre 2026. Le compagnon possède sa suite Node séparée de 75 tests ; aucune détection positive réelle n'est déduite de ces essais hors navigateur.
 
 L'ancienne interface Flask locale reste disponible et documentée dans [README-WEB.md](README-WEB.md), mais elle ne constitue pas une démo à publier. Le script historique `crous_notifier.py` conserve son mode Telegram séparé ; le nouveau module personnel ne le configure ni ne le lance.
