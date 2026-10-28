@@ -1,6 +1,17 @@
 # Crous Notifier
 
-**Usage actuel : suivi personnel local pour Cergy, avec préférence chambre et aucun budget imposé.** Historique SQLite, notifications locales dédupliquées, suivi manuel des démarches et sauvegardes : [guide personnel Windows](README-PERSONAL.md).
+**Usage actuel : suivi personnel local pour Cergy, avec préférence chambre, entrée dès disponibilité et aucun budget imposé.** Le [compagnon Edge](browser-extension/README.md) surveille la recherche dans la session normale du navigateur et envoie les notifications Windows. Le [suivi SQLite](README-PERSONAL.md) permet aussi d'archiver les relevés et les démarches.
+
+| Au quotidien | Fonctionnement |
+| --- | --- |
+| Démarrer | Ouvrir la recherche Cergy connectée, puis cliquer **Suivre cet onglet** dans le badge local. |
+| Vérifications | Environ toutes les cinq minutes, Edge ouvert et PC éveillé. Ce chat n'a pas besoin de rester ouvert. |
+| Changements | Notifications locales dédupliquées pour les fiches nouvelles ou modifiées ; historique conservé dans Edge. |
+| Session expirée | Surveillance suspendue : se reconnecter dans le portail, puis reprendre depuis le badge. |
+| Plusieurs pages | Relevé partiel : seule la page courante est suivie. Les informations absentes restent à vérifier. |
+| Candidature | Ouvrir la fiche officielle pour vérifier la disponibilité et effectuer la démarche. |
+
+La recette du 27 octobre a confirmé une notification Windows reçue et un cycle automatique avec **Connecté confirmé / Relevé complet**. La recherche affichait zéro logement à cet instant ; ce résultat n'est pas une mesure de disponibilité actuelle.
 
 Le module `python -m crous_personal` n'envoie aucun message externe. La source publique et les offres accessibles après connexion DSE restent distinguées. Aucun site de démonstration ni déploiement cloud n'est nécessaire.
 

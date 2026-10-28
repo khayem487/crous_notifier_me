@@ -14,7 +14,11 @@ Une annonce dont la ville, le type ou la date ne sont pas explicitement établis
 
 Pour l'installation et l'usage du compagnon, voir [son guide](browser-extension/README.md). Le navigateur doit rester ouvert et le PC éveillé pour ses contrôles ; après un redémarrage, le suivi reprend ses réglages enregistrés. L'installation seule ne lance pas la surveillance : il faut l'activer dans son interface.
 
-L'installation dans Edge est manuelle : l'outil de contrôle n'a pas accès aux pages internes de gestion des extensions. Le paquet est préparé et testé ; son installation, une vraie notification Windows et le premier cycle connecté restent à vérifier. Le 27 octobre, la connexion MesServices a été confirmée, mais son relais vers le portail logement puis la recherche Cergy ont retourné une erreur serveur 500. Ce constat ne prouve pas des identifiants erronés ni l'absence de logements.
+L'installation dans Edge est manuelle, selon [le guide du compagnon](browser-extension/README.md). La recette du 27 octobre a confirmé l'installation sur ce PC, une notification Windows TEST reçue et un cycle automatique connecté. Après rétablissement de la session du portail et correction du lien de déconnexion contenant le nom du compte, le badge affichait **Relevé complet** et **Connecté confirmé** à 19 h 05, heure de Paris.
+
+Au quotidien, laisse Edge et l'onglet suivi ouverts, avec le PC éveillé. Tu peux fermer ce chat. Le badge **Pause** arrête les contrôles sans effacer l'historique ; **Suivre cet onglet** reprend le suivi dans la recherche Cergy. Si une connexion est demandée, termine-la normalement avant de reprendre. La cadence peut être retardée par le navigateur ou la veille ; aucun fonctionnement PC éteint n'est promis.
+
+Le zéro logement de la recette décrit uniquement le résultat affiché à cet instant. La détection d'une première vraie annonce positive reste à observer. Une pagination active conserve les fiches vues mais indique une couverture partielle ; les candidatures et réservations restent des démarches dans le site officiel.
 
 ## Suivi Python et sauvegarde locale
 
